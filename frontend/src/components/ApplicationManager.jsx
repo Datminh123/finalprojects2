@@ -3,6 +3,7 @@ import { Table, Tag, Card, Button, Typography, Space } from 'antd';
 import { useApplications } from '../hooks/useApplications';
 import { useAuth } from '../hooks/useAuth';
 import { useJobs } from '../hooks/useJobs';
+import { FileText, Eye, Check, X, User, Briefcase, MapPin, Calendar } from 'lucide-react';
 
 const { Text } = Typography;
 
@@ -46,11 +47,11 @@ export const ApplicationManager = () => {
       key: 'action',
       render: (_, record) => (
         <Space>
-          <Button type="link" href={record.resume} target="_blank">Xem CV</Button>
+          <Button type="link" href={record.resume} target="_blank" icon={<Eye size={14} />}>Xem CV</Button>
           {user.role === 'employer' && record.status === 'pending' && (
             <>
-              <Button size="small" type="primary" ghost>Duyệt</Button>
-              <Button size="small" danger ghost>Từ chối</Button>
+              <Button size="small" type="primary" ghost icon={<Check size={14} />}>Duyệt</Button>
+              <Button size="small" danger ghost icon={<X size={14} />}>Từ chối</Button>
             </>
           )}
         </Space>
@@ -59,7 +60,14 @@ export const ApplicationManager = () => {
   ].filter(item => !item.hidden);
 
   return (
-    <Card title={user.role === 'employer' ? "👥 Quản lý danh sách ứng viên" : "📋 Đơn ứng tuyển của tôi"}>
+    <Card 
+      title={
+        <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {user.role === 'employer' ? <Briefcase size={20} color="#4f46e5" /> : <User size={20} color="#4f46e5" />}
+          {user.role === 'employer' ? "Quản lý danh sách ứng viên" : "Đơn ứng tuyển của tôi"}
+        </span>
+      }
+    >
       <Table 
         columns={columns} 
         dataSource={myApps} 

@@ -3,6 +3,7 @@ import { Card, Table, Button, Tag, Space, Modal, Row, Col, Statistic, Input, Sel
 import { useAuth } from '../hooks/useAuth';
 import { useJobs } from '../hooks/useJobs';
 import { useApplications } from '../hooks/useApplications';
+import { Plus, Edit, Trash2, Check, X, FileText, User, Clock, Briefcase, Building2, MapPin, DollarSign } from 'lucide-react';
 
 const { Option } = Select;
 
@@ -158,8 +159,8 @@ export const EmployerDashboard = () => {
       key: 'action',
       render: (_, record) => (
         <Space>
-          <Button type="link" onClick={() => openEditModal(record)}>Sửa</Button>
-          <Button type="link" danger onClick={() => handleDeleteJob(record)}>
+          <Button type="link" onClick={() => openEditModal(record)} icon={<Edit size={14} />}>Sửa</Button>
+          <Button type="link" danger onClick={() => handleDeleteJob(record)} icon={<Trash2 size={14} />}>
             Xóa
           </Button>
         </Space>
@@ -217,8 +218,8 @@ export const EmployerDashboard = () => {
       dataIndex: 'resume',
       key: 'resume',
       render: (link) => link ? (
-        <Button type="link" href={link} target="_blank" rel="noopener noreferrer">
-          📄 Xem CV
+        <Button type="link" href={link} target="_blank" rel="noopener noreferrer" icon={<FileText size={14} color="#4f46e5" />}>
+          Xem CV
         </Button>
       ) : 'Chưa có'
     },
@@ -230,6 +231,7 @@ export const EmployerDashboard = () => {
           <Button 
             type="primary" 
             size="small"
+            icon={<Check size={14} />}
             onClick={() => handleUpdateStatus(record, 'accepted')}
             disabled={record.status !== 'pending'}
           >
@@ -238,6 +240,7 @@ export const EmployerDashboard = () => {
           <Button 
             danger 
             size="small"
+            icon={<X size={14} />}
             onClick={() => handleUpdateStatus(record, 'rejected')}
             disabled={record.status !== 'pending'}
           >
@@ -254,34 +257,56 @@ export const EmployerDashboard = () => {
         <Col xs={24} sm={8}>
           <Card>
             {!jobs ? <Skeleton active paragraph={false} /> : (
-              <Statistic title="Tin tuyển dụng" value={myJobs.length} prefix="💼" />
+              <Statistic 
+                title={<span style={{ color: '#64748b', fontWeight: 500 }}>Tin tuyển dụng</span>} 
+                value={myJobs.length} 
+                prefix={<Briefcase size={24} color="#4f46e5" />} 
+                valueStyle={{ color: '#1e293b', fontWeight: 700 }}
+              />
             )}
           </Card>
         </Col>
         <Col xs={24} sm={8}>
           <Card>
             {!applications ? <Skeleton active paragraph={false} /> : (
-              <Statistic title="Ứng viên" value={myApplications.length} prefix="👤" />
+              <Statistic 
+                title={<span style={{ color: '#64748b', fontWeight: 500 }}>Ứng viên</span>} 
+                value={myApplications.length} 
+                prefix={<User size={24} color="#10b981" />} 
+                valueStyle={{ color: '#1e293b', fontWeight: 700 }}
+              />
             )}
           </Card>
         </Col>
         <Col xs={24} sm={8}>
           <Card>
             {!applications ? <Skeleton active paragraph={false} /> : (
-              <Statistic title="Chờ duyệt" value={myApplications.filter(a => a.status === 'pending').length} prefix="📄" />
+              <Statistic 
+                title={<span style={{ color: '#64748b', fontWeight: 500 }}>Chờ duyệt</span>} 
+                value={myApplications.filter(a => a.status === 'pending').length} 
+                prefix={<Clock size={24} color="#f59e0b" />} 
+                valueStyle={{ color: '#1e293b', fontWeight: 700 }}
+              />
             )}
           </Card>
         </Col>
       </Row>
 
       <Card 
-        title="Tin tuyển dụng của tôi" 
+        title={
+          <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Briefcase size={20} color="#4f46e5" />
+            Tin tuyển dụng của tôi
+          </span>
+        }
         extra={
           <Button 
             type="primary"
+            icon={<Plus size={16} />}
             onClick={openCreateModal}
+            style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)' }}
           >
-            ➕ Đăng tin tuyển dụng
+            Đăng tin tuyển dụng
           </Button>
         }
         style={{ marginBottom: 24 }}

@@ -4,10 +4,9 @@ import {
   Input, Select, Tabs, message, Skeleton, Spin, Popconfirm, Form
 } from 'antd';
 import { 
-  UserOutlined, FileTextOutlined, TeamOutlined, 
-  SearchOutlined, DeleteOutlined, EditOutlined, ReloadOutlined,
-  DashboardOutlined, AppstoreOutlined
-} from '@ant-design/icons';
+  Users, FileText, Search, Trash2, Edit, RefreshCw,
+  LayoutDashboard, AppWindow, Shield, UserCheck, Briefcase, FileStack, CheckCircle, Clock, Building2
+} from 'lucide-react';
 import { adminAPI } from '../services/api';
 
 const { Option } = Select;
@@ -183,9 +182,9 @@ export const AdminDashboard = () => {
       title: 'Hành động', key: 'action', width: 150,
       render: (_, record) => (
         <Space size="small">
-          <Button type="link" size="small" icon={<EditOutlined />} onClick={() => openEditModal(record, 'user')}>Sửa</Button>
+          <Button type="link" size="small" icon={<Edit size={14} />} onClick={() => openEditModal(record, 'user')}>Sửa</Button>
           <Popconfirm title="Xóa người dùng này?" onConfirm={() => handleDeleteUser(record._id)} okText="Xóa" cancelText="Hủy">
-            <Button type="link" danger size="small" icon={<DeleteOutlined />}>Xóa</Button>
+            <Button type="link" danger size="small" icon={<Trash2 size={14} />}>Xóa</Button>
           </Popconfirm>
         </Space>
       )
@@ -206,9 +205,9 @@ export const AdminDashboard = () => {
       title: 'Hành động', key: 'action', width: 150,
       render: (_, record) => (
         <Space size="small">
-          <Button type="link" size="small" icon={<EditOutlined />} onClick={() => openEditModal(record, 'job')}>Sửa</Button>
+          <Button type="link" size="small" icon={<Edit size={14} />} onClick={() => openEditModal(record, 'job')}>Sửa</Button>
           <Popconfirm title="Xóa công việc này?" onConfirm={() => handleDeleteJob(record._id)} okText="Xóa" cancelText="Hủy">
-            <Button type="link" danger size="small" icon={<DeleteOutlined />}>Xóa</Button>
+            <Button type="link" danger size="small" icon={<Trash2 size={14} />}>Xóa</Button>
           </Popconfirm>
         </Space>
       )
@@ -234,7 +233,7 @@ export const AdminDashboard = () => {
       title: 'Hành động', key: 'action', width: 80,
       render: (_, record) => (
         <Popconfirm title="Xóa đơn ứng tuyển này?" onConfirm={() => handleDeleteApplication(record._id)} okText="Xóa" cancelText="Hủy">
-          <Button type="link" danger size="small" icon={<DeleteOutlined />}>Xóa</Button>
+          <Button type="link" danger size="small" icon={<Trash2 size={14} />}>Xóa</Button>
         </Popconfirm>
       )
     }
@@ -244,7 +243,7 @@ export const AdminDashboard = () => {
   const tabItems = [
     {
       key: 'users',
-      label: <span><TeamOutlined /> Người dùng</span>,
+      label: <span><Users size={16} /> Người dùng</span>,
       children: (
         <div>
           <Space style={{ marginBottom: 16, flexWrap: 'wrap' }} size="middle">
@@ -252,7 +251,7 @@ export const AdminDashboard = () => {
               placeholder="Tìm theo tên, email..."
               allowClear
               style={{ width: 280 }}
-              prefix={<SearchOutlined />}
+              prefix={<Search size={16} color="#94a3b8" />}
               onSearch={(v) => setUsersSearch(v)}
               onChange={(e) => { if (!e.target.value) setUsersSearch(''); }}
             />
@@ -263,7 +262,7 @@ export const AdminDashboard = () => {
               <Option value="employer">Nhà tuyển dụng</Option>
               <Option value="admin">Admin</Option>
             </Select>
-            <Button icon={<ReloadOutlined />} onClick={() => fetchUsers(1)}>Tải lại</Button>
+            <Button icon={<RefreshCw size={16} />} onClick={() => fetchUsers(1)}>Tải lại</Button>
           </Space>
           <Table 
             columns={userColumns}
@@ -284,7 +283,7 @@ export const AdminDashboard = () => {
     },
     {
       key: 'jobs',
-      label: <span><FileTextOutlined /> Công việc</span>,
+      label: <span><Briefcase size={16} /> Công việc</span>,
       children: (
         <div>
           <Space style={{ marginBottom: 16, flexWrap: 'wrap' }} size="middle">
@@ -292,11 +291,11 @@ export const AdminDashboard = () => {
               placeholder="Tìm theo tiêu đề, công ty..."
               allowClear
               style={{ width: 280 }}
-              prefix={<SearchOutlined />}
+              prefix={<Search size={16} color="#94a3b8" />}
               onSearch={(v) => setJobsSearch(v)}
               onChange={(e) => { if (!e.target.value) setJobsSearch(''); }}
             />
-            <Button icon={<ReloadOutlined />} onClick={() => fetchJobs(1)}>Tải lại</Button>
+            <Button icon={<RefreshCw size={16} />} onClick={() => fetchJobs(1)}>Tải lại</Button>
           </Space>
           <Table 
             columns={jobColumns}
@@ -317,7 +316,7 @@ export const AdminDashboard = () => {
     },
     {
       key: 'applications',
-      label: <span><AppstoreOutlined /> Đơn ứng tuyển</span>,
+      label: <span><FileStack size={16} /> Đơn ứng tuyển</span>,
       children: (
         <div>
           <Space style={{ marginBottom: 16, flexWrap: 'wrap' }} size="middle">
@@ -325,7 +324,7 @@ export const AdminDashboard = () => {
               placeholder="Tìm theo tên, email ứng viên..."
               allowClear
               style={{ width: 280 }}
-              prefix={<SearchOutlined />}
+              prefix={<Search size={16} color="#94a3b8" />}
               onSearch={(v) => setAppsSearch(v)}
               onChange={(e) => { if (!e.target.value) setAppsSearch(''); }}
             />
@@ -336,7 +335,7 @@ export const AdminDashboard = () => {
               <Option value="accepted">Đã chấp nhận</Option>
               <Option value="rejected">Đã từ chối</Option>
             </Select>
-            <Button icon={<ReloadOutlined />} onClick={() => fetchApplications(1)}>Tải lại</Button>
+            <Button icon={<RefreshCw size={16} />} onClick={() => fetchApplications(1)}>Tải lại</Button>
           </Space>
           <Table 
             columns={appColumns}
@@ -374,32 +373,32 @@ export const AdminDashboard = () => {
           <>
             <Col xs={12} sm={8} md={4}>
               <Card style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
-                <Statistic title={<span style={{ color: 'rgba(255,255,255,0.85)' }}>Tổng người dùng</span>} value={stats.totalUsers} prefix={<TeamOutlined />} valueStyle={{ color: '#fff' }} />
+                <Statistic title={<span style={{ color: 'rgba(255,255,255,0.85)' }}>Tổng người dùng</span>} value={stats.totalUsers} prefix={<Users size={20} color="#fff" />} valueStyle={{ color: '#fff' }} />
               </Card>
             </Col>
             <Col xs={12} sm={8} md={4}>
               <Card style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}>
-                <Statistic title={<span style={{ color: 'rgba(255,255,255,0.85)' }}>Ứng viên</span>} value={stats.totalCandidates} prefix="👤" valueStyle={{ color: '#fff' }} />
+                <Statistic title={<span style={{ color: 'rgba(255,255,255,0.85)' }}>Ứng viên</span>} value={stats.totalCandidates} prefix={<UserCheck size={20} color="#fff" />} valueStyle={{ color: '#fff' }} />
               </Card>
             </Col>
             <Col xs={12} sm={8} md={4}>
               <Card style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }}>
-                <Statistic title={<span style={{ color: 'rgba(255,255,255,0.85)' }}>Nhà tuyển dụng</span>} value={stats.totalEmployers} prefix="🏢" valueStyle={{ color: '#fff' }} />
+                <Statistic title={<span style={{ color: 'rgba(255,255,255,0.85)' }}>Nhà tuyển dụng</span>} value={stats.totalEmployers} prefix={<Building2 size={20} color="#fff" />} valueStyle={{ color: '#fff' }} />
               </Card>
             </Col>
             <Col xs={12} sm={8} md={4}>
               <Card style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' }}>
-                <Statistic title={<span style={{ color: 'rgba(255,255,255,0.85)' }}>Công việc</span>} value={stats.totalJobs} prefix="💼" valueStyle={{ color: '#fff' }} />
+                <Statistic title={<span style={{ color: 'rgba(255,255,255,0.85)' }}>Công việc</span>} value={stats.totalJobs} prefix={<Briefcase size={20} color="#fff" />} valueStyle={{ color: '#fff' }} />
               </Card>
             </Col>
             <Col xs={12} sm={8} md={4}>
               <Card style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }}>
-                <Statistic title={<span style={{ color: 'rgba(255,255,255,0.85)' }}>Đơn ứng tuyển</span>} value={stats.totalApplications} prefix="📄" valueStyle={{ color: '#fff' }} />
+                <Statistic title={<span style={{ color: 'rgba(255,255,255,0.85)' }}>Đơn ứng tuyển</span>} value={stats.totalApplications} prefix={<FileText size={20} color="#fff" />} valueStyle={{ color: '#fff' }} />
               </Card>
             </Col>
             <Col xs={12} sm={8} md={4}>
               <Card style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)' }}>
-                <Statistic title={<span style={{ color: 'rgba(255,255,255,0.85)' }}>Chờ duyệt</span>} value={stats.pendingApplications} prefix="⏳" valueStyle={{ color: '#fff' }} />
+                <Statistic title={<span style={{ color: 'rgba(255,255,255,0.85)' }}>Chờ duyệt</span>} value={stats.pendingApplications} prefix={<Clock size={20} color="#fff" />} valueStyle={{ color: '#fff' }} />
               </Card>
             </Col>
           </>

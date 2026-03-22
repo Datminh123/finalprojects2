@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Card, Input, Button, Typography, Steps, message, Result } from 'antd';
-import { MailOutlined, LockOutlined, SafetyOutlined } from '@ant-design/icons';
+import { MailOutlined, LockOutlined, SafetyOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { authAPI } from '../services/api';
 
 const { Title, Text } = Typography;
 
-export const ForgotPassword = ({ onBackToLogin }) => {
+export const ForgotPassword = ({ onBackToLogin, onBackToLanding }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
@@ -82,9 +82,23 @@ export const ForgotPassword = ({ onBackToLogin }) => {
           maxWidth: 460, 
           boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
           borderRadius: '16px',
-          border: 'none'
+          border: 'none',
+          background: '#ffffff'
         }}
+        bodyStyle={{ padding: '32px' }}
       >
+        {/* Back Button */}
+        {onBackToLanding && (
+          <Button 
+            type="text" 
+            icon={<ArrowLeftOutlined />}
+            onClick={onBackToLanding}
+            style={{ marginBottom: 16, color: '#64748b' }}
+          >
+            Quay lại
+          </Button>
+        )}
+
         <Title level={2} style={{ textAlign: 'center', marginBottom: 8 }}>
           🔐 Quên mật khẩu
         </Title>
