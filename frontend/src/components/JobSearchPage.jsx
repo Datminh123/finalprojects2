@@ -183,6 +183,7 @@ export const JobSearchPage = () => {
         rowKey={(record) => record._id || record.id}
         pagination={{ pageSize: 5 }}
         bordered
+        scroll={{ x: 700 }}
       />
     </div>
   );

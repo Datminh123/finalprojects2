@@ -30,9 +30,11 @@ export const CandidateLanding = ({ onLogin, onRegister, onSwitchToEmployer }) =>
         display: 'flex', 
         justifyContent: 'space-between', 
         alignItems: 'center',
-        padding: '16px 40px',
+        padding: '12px 16px',
         background: '#fff',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
+        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+        flexWrap: 'wrap',
+        gap: 8
       }}>
         <div style={{ 
           display: 'flex', 
@@ -46,7 +48,7 @@ export const CandidateLanding = ({ onLogin, onRegister, onSwitchToEmployer }) =>
           <span style={{ fontSize: 24 }}>💼</span>
           <span style={{ fontWeight: 600, fontSize: 16 }}>JOB PORTAL</span>
         </div>
-        <div style={{ display: 'flex', gap: 24 }}>
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
           <a style={{ color: '#2563eb', fontSize: 14, fontWeight: 600, cursor: 'pointer', textDecoration: 'none' }}>
             👤 Ứng viên
           </a>
@@ -60,7 +62,7 @@ export const CandidateLanding = ({ onLogin, onRegister, onSwitchToEmployer }) =>
       </div>
 
       {/* Hero Section */}
-      <div style={{ textAlign: 'center', marginBottom: 60, padding: '60px 20px 0' }}>
+      <div style={{ textAlign: 'center', marginBottom: 40, padding: '40px 16px 0' }}>
         <div style={{
           width: 100,
           height: 100,
@@ -149,10 +151,10 @@ export const CandidateLanding = ({ onLogin, onRegister, onSwitchToEmployer }) =>
       {/* Benefits */}
       <div style={{ 
         maxWidth: 800, 
-        margin: '60px auto 0',
+        margin: '40px auto 0',
         background: '#fff',
         borderRadius: 20,
-        padding: 40,
+        padding: '24px 16px',
         boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
       }}>
         <Title level={3} style={{ textAlign: 'center', marginBottom: 32 }}>

@@ -316,6 +316,7 @@ export const EmployerDashboard = () => {
           dataSource={myJobs} 
           rowKey="_id"
           pagination={{ pageSize: 5 }}
+          scroll={{ x: 700 }}
         />
       </Card>
 
@@ -325,6 +326,7 @@ export const EmployerDashboard = () => {
           dataSource={myApplications} 
           rowKey="_id"
           pagination={{ pageSize: 5 }}
+          scroll={{ x: 800 }}
         />
       </Card>
 
@@ -335,7 +337,8 @@ export const EmployerDashboard = () => {
         onOk={handleSubmitJob}
         okText={editingJob ? "Cập nhật" : "Đăng tin"}
         cancelText="Hủy"
-        width={700}
+        width={'95%'}
+        style={{ maxWidth: 700 }}
       >
         <div style={{ marginBottom: 16 }}>
           <div style={{ marginBottom: 8 }}>Tiêu đề công việc *</div>
@@ -356,7 +359,7 @@ export const EmployerDashboard = () => {
         </div>
 
         <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <div style={{ marginBottom: 16 }}>
               <div style={{ marginBottom: 8 }}>Thành phố *</div>
               <Select 
@@ -373,7 +376,7 @@ export const EmployerDashboard = () => {
               </Select>
             </div>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <div style={{ marginBottom: 16 }}>
               <div style={{ marginBottom: 8 }}>Ngành nghề *</div>
               <Select 
@@ -395,7 +398,7 @@ export const EmployerDashboard = () => {
         </Row>
 
         <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <div style={{ marginBottom: 16 }}>
               <div style={{ marginBottom: 8 }}>Mức lương *</div>
               <Input 
@@ -405,7 +408,7 @@ export const EmployerDashboard = () => {
               />
             </div>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <div style={{ marginBottom: 16 }}>
               <div style={{ marginBottom: 8 }}>Năm kinh nghiệm *</div>
               <Space.Compact style={{ width: '100%' }}>
@@ -424,7 +427,7 @@ export const EmployerDashboard = () => {
         </Row>
 
         <Row gutter={16}>
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <div style={{ marginBottom: 16 }}>
               <div style={{ marginBottom: 8 }}>Loại hình *</div>
               <Select 
@@ -439,7 +442,7 @@ export const EmployerDashboard = () => {
               </Select>
             </div>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <div style={{ marginBottom: 16 }}>
               <div style={{ marginBottom: 8 }}>Cấp bậc *</div>
               <Select 

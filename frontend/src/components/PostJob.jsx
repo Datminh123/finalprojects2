@@ -89,7 +89,7 @@ export const PostJob = () => {
 
         <Row gutter={16}>
           {/* Thành phố */}
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <div style={{ marginBottom: 20 }}>
               <Text strong>Thành phố *</Text>
               <Select
@@ -108,7 +108,7 @@ export const PostJob = () => {
             </div>
           </Col>
           {/* Ngành nghề */}
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <div style={{ marginBottom: 20 }}>
               <Text strong>Ngành nghề *</Text>
               <Select
@@ -132,7 +132,7 @@ export const PostJob = () => {
 
         <Row gutter={16}>
           {/* Mức lương */}
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <div style={{ marginBottom: 20 }}>
               <Text strong>Mức lương *</Text>
               <Input
@@ -145,7 +145,7 @@ export const PostJob = () => {
             </div>
           </Col>
           {/* Kinh nghiệm */}
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <div style={{ marginBottom: 20 }}>
               <Text strong>Năm kinh nghiệm *</Text>
               <Space.Compact style={{ width: '100%', marginTop: 8 }}>
@@ -166,7 +166,7 @@ export const PostJob = () => {
 
         <Row gutter={16}>
           {/* Loại hình */}
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <div style={{ marginBottom: 20 }}>
               <Text strong>Loại hình *</Text>
               <Select
@@ -184,7 +184,7 @@ export const PostJob = () => {
             </div>
           </Col>
           {/* Cấp bậc */}
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <div style={{ marginBottom: 20 }}>
               <Text strong>Cấp bậc *</Text>
               <Select

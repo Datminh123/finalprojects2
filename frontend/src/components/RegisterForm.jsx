@@ -143,7 +143,8 @@ export const RegisterForm = ({ onRegister, onBackToLogin, onBackToLanding }) => 
       
       <Card 
         style={{ 
-          width: 440, 
+          width: '100%',
+          maxWidth: 440, 
           boxShadow: '0 25px 50px rgba(0,0,0,0.15)',
           borderRadius: '20px',
           border: 'none',

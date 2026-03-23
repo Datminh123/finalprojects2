@@ -116,7 +116,7 @@ const MainLayout = () => {
   };
 
   const notificationContent = (
-    <div style={{ width: 320 }}>
+    <div style={{ width: 'min(320px, calc(100vw - 48px))' }}>
       <div style={{
         padding: '12px 16px',
         borderBottom: '1px solid #e5e7eb',
@@ -372,7 +372,7 @@ const MainLayout = () => {
       <Layout>
         <Header style={{
           background: '#fff', 
-          padding: '0 20px', 
+          padding: isMobile ? '0 8px' : '0 20px', 
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
@@ -380,70 +380,78 @@ const MainLayout = () => {
           position: 'sticky', 
           top: 0, 
           zIndex: 9,
-          borderBottom: '1px solid #e2e8f0'
+          borderBottom: '1px solid #e2e8f0',
+          height: 'auto',
+          lineHeight: 'normal'
         }}>
           {/* Top Row: Logo + Nav + User Info */}
           <div style={{ 
             display: 'flex', 
             justifyContent: 'space-between', 
             alignItems: 'center',
-            padding: '8px 0'
+            padding: '8px 0',
+            gap: 8,
+            minWidth: 0
           }}>
             {/* Left: Logo/Title */}
-            <Space>
+            <Space style={{ minWidth: 0, flexShrink: 1 }}>
               {isMobile && (
                 <Button
                   type="text"
-                  icon={<MenuIcon size={22} style={{ color: '#3b82f6' }} />}
+                  icon={<MenuIcon size={20} style={{ color: '#3b82f6' }} />}
                   onClick={() => setDrawerVisible(true)}
                   style={{ 
                     fontSize: 20,
                     background: '#f1f5f9',
                     borderRadius: 10,
-                    width: 40,
-                    height: 40
+                    width: 36,
+                    height: 36,
+                    minWidth: 36,
+                    flexShrink: 0
                   }}
                 />
               )}
               <div style={{ 
                 display: 'flex', 
                 alignItems: 'center', 
-                gap: 12,
-                padding: '8px 16px',
+                gap: isMobile ? 6 : 12,
+                padding: isMobile ? '6px 10px' : '8px 16px',
                 background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                 borderRadius: 10,
-                color: '#fff'
+                color: '#fff',
+                minWidth: 0,
+                overflow: 'hidden'
               }}>
                 {getRoleIcon()}
-                <Title level={4} style={{ margin: 0, fontSize: isMobile ? 14 : 17, color: '#fff' }}>
-                  HỆ THỐNG {roleLabels[user.role] || user.role?.toUpperCase()}
+                <Title level={4} style={{ margin: 0, fontSize: isMobile ? 12 : 17, color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {isMobile ? (roleLabels[user.role] || user.role?.toUpperCase()) : `HỆ THỐNG ${roleLabels[user.role] || user.role?.toUpperCase()}`}
                 </Title>
               </div>
             </Space>
 
             {/* Right: User Info + Logout */}
-            <Space size={isMobile ? 'small' : 'middle'} align="center">
+            <Space size={isMobile ? 4 : 'middle'} align="center" style={{ flexShrink: 0 }}>
               <Popover content={notificationContent} title={false} trigger="click" placement="bottomRight">
                 <Badge count={notifications.filter(n => n.isRead === false).length} offset={[-2, 2]}>
                   <Button 
                     type="text" 
                     style={{ 
-                   
                       borderRadius: 12,
-                      width: 60,
-                      height: 70,
+                      width: isMobile ? 36 : 48,
+                      height: isMobile ? 36 : 48,
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center'
+                      justifyContent: 'center',
+                      padding: 0
                     }}
                   >
-                    <Bell size={24} color="#3b82f6" />
+                    <Bell size={isMobile ? 18 : 24} color="#3b82f6" />
                   </Button>
                 </Badge>
               </Popover>
               <Space>
                 <Avatar
-                  size={40}
+                  size={isMobile ? 32 : 40}
                   src={user?.avatar || `https://ui-avatars.com/api/?name=${user?.fullName}&background=3b82f6&color=fff`}
                   style={{ border: '2px solid #3b82f6' }}
                 >

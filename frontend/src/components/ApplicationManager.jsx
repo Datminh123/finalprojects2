@@ -74,6 +74,7 @@ export const ApplicationManager = () => {
         rowKey="_id" 
         loading={loading}
         pagination={{ pageSize: 8 }}
+        scroll={{ x: 600 }}
       />
     </Card>
   );

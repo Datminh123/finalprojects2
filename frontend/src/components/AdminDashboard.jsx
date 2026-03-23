@@ -250,12 +250,12 @@ export const AdminDashboard = () => {
             <Input.Search
               placeholder="Tìm theo tên, email..."
               allowClear
-              style={{ width: 280 }}
+              style={{ width: '100%', maxWidth: 280 }}
               prefix={<Search size={16} color="#94a3b8" />}
               onSearch={(v) => setUsersSearch(v)}
               onChange={(e) => { if (!e.target.value) setUsersSearch(''); }}
             />
-            <Select placeholder="Lọc vai trò" allowClear style={{ width: 160 }}
+            <Select placeholder="Lọc vai trò" allowClear style={{ width: '100%', maxWidth: 160 }}
               value={usersRoleFilter || undefined} onChange={(v) => setUsersRoleFilter(v || '')}
             >
               <Option value="candidate">Ứng viên</Option>
@@ -290,7 +290,7 @@ export const AdminDashboard = () => {
             <Input.Search
               placeholder="Tìm theo tiêu đề, công ty..."
               allowClear
-              style={{ width: 280 }}
+              style={{ width: '100%', maxWidth: 280 }}
               prefix={<Search size={16} color="#94a3b8" />}
               onSearch={(v) => setJobsSearch(v)}
               onChange={(e) => { if (!e.target.value) setJobsSearch(''); }}
@@ -323,12 +323,12 @@ export const AdminDashboard = () => {
             <Input.Search
               placeholder="Tìm theo tên, email ứng viên..."
               allowClear
-              style={{ width: 280 }}
+              style={{ width: '100%', maxWidth: 280 }}
               prefix={<Search size={16} color="#94a3b8" />}
               onSearch={(v) => setAppsSearch(v)}
               onChange={(e) => { if (!e.target.value) setAppsSearch(''); }}
             />
-            <Select placeholder="Trạng thái" allowClear style={{ width: 160 }}
+            <Select placeholder="Trạng thái" allowClear style={{ width: '100%', maxWidth: 160 }}
               value={appsStatusFilter || undefined} onChange={(v) => setAppsStatusFilter(v || '')}
             >
               <Option value="pending">Chờ duyệt</Option>
@@ -419,7 +419,8 @@ export const AdminDashboard = () => {
         confirmLoading={editLoading}
         okText="Lưu"
         cancelText="Hủy"
-        width={600}
+        width={'95%'}
+        style={{ maxWidth: 600 }}
       >
         {editType === 'user' && (
           <>
@@ -432,7 +433,7 @@ export const AdminDashboard = () => {
               <Input value={editForm.email} onChange={(e) => setEditForm(p => ({ ...p, email: e.target.value }))} />
             </div>
             <Row gutter={16}>
-              <Col span={12}>
+              <Col xs={24} sm={12}>
                 <div style={{ marginBottom: 12 }}>
                   <label style={{ fontWeight: 500 }}>Vai trò</label>
                   <Select value={editForm.role} style={{ width: '100%' }} onChange={(v) => setEditForm(p => ({ ...p, role: v }))}>
@@ -442,7 +443,7 @@ export const AdminDashboard = () => {
                   </Select>
                 </div>
               </Col>
-              <Col span={12}>
+              <Col xs={24} sm={12}>
                 <div style={{ marginBottom: 12 }}>
                   <label style={{ fontWeight: 500 }}>SĐT</label>
                   <Input value={editForm.phone} onChange={(e) => setEditForm(p => ({ ...p, phone: e.target.value }))} />
@@ -463,13 +464,13 @@ export const AdminDashboard = () => {
               <Input value={editForm.title} onChange={(e) => setEditForm(p => ({ ...p, title: e.target.value }))} />
             </div>
             <Row gutter={16}>
-              <Col span={12}>
+              <Col xs={24} sm={12}>
                 <div style={{ marginBottom: 12 }}>
                   <label style={{ fontWeight: 500 }}>Công ty</label>
                   <Input value={editForm.company} onChange={(e) => setEditForm(p => ({ ...p, company: e.target.value }))} />
                 </div>
               </Col>
-              <Col span={12}>
+              <Col xs={24} sm={12}>
                 <div style={{ marginBottom: 12 }}>
                   <label style={{ fontWeight: 500 }}>Thành phố</label>
                   <Input value={editForm.city} onChange={(e) => setEditForm(p => ({ ...p, city: e.target.value }))} />
@@ -477,13 +478,13 @@ export const AdminDashboard = () => {
               </Col>
             </Row>
             <Row gutter={16}>
-              <Col span={12}>
+              <Col xs={24} sm={12}>
                 <div style={{ marginBottom: 12 }}>
                   <label style={{ fontWeight: 500 }}>Lương</label>
                   <Input value={editForm.salary} onChange={(e) => setEditForm(p => ({ ...p, salary: e.target.value }))} />
                 </div>
               </Col>
-              <Col span={12}>
+              <Col xs={24} sm={12}>
                 <div style={{ marginBottom: 12 }}>
                   <label style={{ fontWeight: 500 }}>Ngành nghề</label>
                   <Input value={editForm.industry} onChange={(e) => setEditForm(p => ({ ...p, industry: e.target.value }))} />
