@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, Input, Select, Button, Typography, Modal, message } from 'antd';
-import { Mail, Lock, User, Phone, Building2, Briefcase, UserCheck, Shield, ArrowLeft } from 'lucide-react';
+import { Mail, Lock, User, Phone, Building2, Briefcase, UserCheck, ArrowLeft } from 'lucide-react';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -104,7 +104,6 @@ export const RegisterForm = ({ onRegister, onBackToLogin, onBackToLanding }) => 
 
   const getRoleIcon = (roleValue) => {
     switch (roleValue) {
-      case 'admin': return <Shield size={16} />;
       case 'employer': return <Briefcase size={16} />;
       default: return <UserCheck size={16} />;
     }
@@ -268,11 +267,6 @@ export const RegisterForm = ({ onRegister, onBackToLogin, onBackToLanding }) => 
             <Option value="employer">
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <Briefcase size={16} color="#10b981" /> Nhà tuyển dụng
-              </div>
-            </Option>
-            <Option value="admin">
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <Shield size={16} color="#f59e0b" /> Quản trị viên
               </div>
             </Option>
           </Select>

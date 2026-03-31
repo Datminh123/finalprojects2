@@ -10,7 +10,8 @@ export const CandidateDashboard = () => {
   const { applications, loading } = useApplications();
   const { user } = useAuth();
 
-  const myApplications = applications.filter(app => app.candidateEmail === user.email);
+  // Backend đã filter theo token — không cần filter lại ở frontend
+  const myApplications = applications;
   const acceptedCount = myApplications.filter(app => app.status === 'accepted').length;
   const pendingCount = myApplications.filter(app => app.status === 'pending').length;
 
@@ -103,7 +104,7 @@ export const CandidateDashboard = () => {
           renderItem={(item) => (
             <List.Item>
               <List.Item.Meta
-                title={`Bạn đã nộp đơn ứng tuyển cho công việc ở công ty ${item.jobId?.company}`}
+                title={`Bạn đã nộp đơn ứng tuyển cho công việc ở công ty ${item.jobId?.company || 'N/A'}`}
                 description={`Thời gian: ${new Date(item.appliedDate).toLocaleString("vi-VN")}`}
               />
 

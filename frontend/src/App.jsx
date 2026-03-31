@@ -18,7 +18,7 @@ import { ChangePassword } from './components/ChangePassword';
 import { PostJob } from './components/PostJob';
 import { EmployerLanding } from './components/EmployerLanding';
 import { CandidateLanding } from './components/CandidateLanding';
-
+import API from './services/api';
 // Lucide Icons
 import { 
   Menu as MenuIcon, 
@@ -52,7 +52,7 @@ const MainLayout = () => {
   const [notifications, setNotifications] = useState([]);
   const [socket, setSocket] = useState(null);
 
-  // Responsive: phát hiện mobile
+  // Responsive
   useEffect(() => {
     const checkMobile = () => {
       const mobile = window.innerWidth < 768;
@@ -66,9 +66,8 @@ const MainLayout = () => {
   useEffect(() => {
     const fetchNotis = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/notifications/${user.email}`);
-        const data = await response.json();
-        setNotifications(data);
+        const response = await API.get(`/notifications/${user.email}`);
+        setNotifications(response.data);
       } catch (err) { console.error("Lỗi fetch noti:", err); }
     };
     if (user?.email) fetchNotis();
@@ -76,7 +75,7 @@ const MainLayout = () => {
 
   useEffect(() => {
     if (user?.email) {
-      const newSocket = io("http://localhost:5000");
+      const newSocket = io(import.meta.env.VITE_SOCKET_URL);
       setSocket(newSocket);
       newSocket.emit("registerUser", user.email);
       return () => newSocket.close();
@@ -99,17 +98,12 @@ const MainLayout = () => {
   const handleMarkAllAsRead = async () => {
     if (!user?.email) return;
     try {
-      const response = await fetch(`http://localhost:5000/api/applications/mark-all-read/${user.email}`, {
-        method: 'PUT'
-      });
-
-      if (response.ok) {
-        setNotifications(prev => prev.map(noti => ({
-          ...noti,
-          isRead: true
-        })));
-        message.success("Đã đọc tất cả thông báo");
-      }
+      await API.put(`/applications/mark-all-read/${user.email}`);
+      setNotifications(prev => prev.map(noti => ({
+        ...noti,
+        isRead: true
+      })));
+      message.success("Đã đọc tất cả thông báo");
     } catch (err) {
       console.error("Lỗi:", err);
     }

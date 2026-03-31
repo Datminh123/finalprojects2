@@ -2,23 +2,14 @@ import express from "express";
 import Account from "../models/Account.js";
 import Jobs from "../models/Jobs.js";
 import Applications from "../models/Applications.js";
+import { authMiddleware, roleMiddleware } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// Middleware kiểm tra quyền admin
-const isAdmin = async (req, res, next) => {
-  const { adminEmail } = req.headers;
-  if (!adminEmail) {
-    return res.status(403).json({ message: "Không có quyền truy cập!" });
-  }
-  const account = await Account.findOne({ email: adminEmail });
-  if (!account || account.role !== "admin") {
-    return res.status(403).json({ message: "Bạn không phải admin!" });
-  }
-  next();
-};
+// Tất cả admin routes đều cần đăng nhập + quyền admin
+router.use(authMiddleware, roleMiddleware(['admin']));
 
-// ============ THỐNG KÊ ============
+//  THỐNG KÊ 
 // GET /api/admin/stats
 router.get("/stats", async (req, res) => {
   try {
@@ -42,7 +33,7 @@ router.get("/stats", async (req, res) => {
   }
 });
 
-// ============ QUẢN LÝ NGƯỜI DÙNG ============
+//  QUẢN LÝ NGƯỜI DÙNG 
 // GET /api/admin/users — Phân trang + tìm kiếm
 router.get("/users", async (req, res) => {
   try {
@@ -108,7 +99,7 @@ router.delete("/users/:id", async (req, res) => {
   }
 });
 
-// ============ QUẢN LÝ CÔNG VIỆC ============
+//  QUẢN LÝ CÔNG VIỆC 
 // GET /api/admin/jobs — Phân trang + tìm kiếm
 router.get("/jobs", async (req, res) => {
   try {
@@ -164,7 +155,7 @@ router.delete("/jobs/:id", async (req, res) => {
   }
 });
 
-// ============ QUẢN LÝ ĐƠN ỨNG TUYỂN ============
+//  QUẢN LÝ ĐƠN ỨNG TUYỂN 
 // GET /api/admin/applications — Phân trang
 router.get("/applications", async (req, res) => {
   try {

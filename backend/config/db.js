@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-
+import { env } from "../config/environtment.js";
 const connectDB = async () => {
   try {
     await mongoose.connect(
-      "mongodb+srv://minhdat2727_db_user:Dat%40123@mindx-cluster.zumnyox.mongodb.net/?appName=mindx-cluster"
+      env.MONGO_URI
     );
 
     console.log("MongoDB Connected");

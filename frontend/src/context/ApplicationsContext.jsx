@@ -9,6 +9,10 @@ export const ApplicationsProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   const fetchApplications = useCallback(async () => {
+    // Chỉ fetch khi user đã đăng nhập (có token)
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
     setLoading(true);
     setError(null);
     try {
@@ -30,7 +34,8 @@ export const ApplicationsProvider = ({ children }) => {
     setError(null);
     try {
       const newApplication = await applicationsAPI.create(applicationData);
-      setApplications(prev => [...prev, newApplication]);
+      // Refresh từ server để có dữ liệu đầy đủ (jobId được populate)
+      await fetchApplications();
       return newApplication;
     } catch (err) {
       setError(err.message);

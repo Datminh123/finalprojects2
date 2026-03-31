@@ -1,8 +1,9 @@
 import express from "express";
 const router = express.Router();
 import Jobs from '../models/Jobs.js'
+import { authMiddleware, roleMiddleware } from '../middleware/authMiddleware.js';
 
-// GET /api/jobs — Có phân trang + tìm kiếm/lọc
+// GET /api/jobs — Công khai: ai cũng xem được danh sách job
 router.get("/", async (req, res) => {
   try {
     const { page, limit, keyword, city, industry, type, level } = req.query;
@@ -60,16 +61,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
-  try {
-    const jobs = new Jobs(req.body);
-    await jobs.save();
-    res.status(201).json(jobs);
-  } catch (error) {
-    res.status(400).json({ message: "Không thể tạo job mới", error: error.message });
-  }
-});
-
+// GET /api/jobs/:id — Công khai: ai cũng xem chi tiết job
 router.get("/:id", async (req, res) => {
   try {
     const job = await Jobs.findById(req.params.id);
@@ -80,18 +72,46 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+// POST /api/jobs — Chỉ employer mới được tạo job
+router.post("/", authMiddleware, roleMiddleware(['employer']), async (req, res) => {
   try {
-    const job = await Jobs.findByIdAndUpdate(req.params.id, req.body, { returnDocument: 'after' });
+    const jobs = new Jobs(req.body);
+    await jobs.save();
+    res.status(201).json(jobs);
+  } catch (error) {
+    res.status(400).json({ message: "Không thể tạo job mới", error: error.message });
+  }
+});
+
+// PUT /api/jobs/:id — Employer chỉ sửa job của chính mình, admin sửa tất cả
+router.put("/:id", authMiddleware, roleMiddleware(['employer', 'admin']), async (req, res) => {
+  try {
+    const job = await Jobs.findById(req.params.id);
     if (!job) return res.status(404).json({ message: "Không tìm thấy công việc" });
-    res.json(job);
+
+    // Employer chỉ được sửa job do mình đăng (so sánh qua postedBy = email)
+    if (req.user.role === 'employer' && job.postedBy !== req.user.email) {
+      return res.status(403).json({ message: "Bạn chỉ được sửa công việc do chính mình đăng!" });
+    }
+
+    const updatedJob = await Jobs.findByIdAndUpdate(req.params.id, req.body, { returnDocument: 'after' });
+    res.json(updatedJob);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
-router.delete("/:id", async (req, res) => {
+// DELETE /api/jobs/:id — Employer chỉ xóa job của chính mình, admin xóa tất cả
+router.delete("/:id", authMiddleware, roleMiddleware(['employer', 'admin']), async (req, res) => {
   try {
+    const job = await Jobs.findById(req.params.id);
+    if (!job) return res.status(404).json({ message: "Không tìm thấy công việc" });
+
+    // Employer chỉ được xóa job do mình đăng
+    if (req.user.role === 'employer' && job.postedBy !== req.user.email) {
+      return res.status(403).json({ message: "Bạn chỉ được xóa công việc do chính mình đăng!" });
+    }
+
     await Jobs.findByIdAndDelete(req.params.id);
     res.json({ message: "Đã xóa công việc" });
   } catch (error) {
@@ -99,7 +119,8 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.post("/bulk", async (req, res) => {
+// POST /api/jobs/bulk — Chỉ employer/admin mới bulk import
+router.post("/bulk", authMiddleware, roleMiddleware(['employer', 'admin']), async (req, res) => {
   try {
     const jobsArray = req.body;
     if (!Array.isArray(jobsArray)) {

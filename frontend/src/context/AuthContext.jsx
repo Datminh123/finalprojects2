@@ -16,9 +16,17 @@ export const AuthProvider = ({ children }) => {
 
     const login = async ({ email, password, role }) => {
         const userData = await authAPI.login({ email, password, role });
-        setUser(userData);
-        localStorage.setItem('user', JSON.stringify(userData));
-        return userData;
+        
+        // Lưu JWT token riêng
+        if (userData.token) {
+            localStorage.setItem('token', userData.token);
+        }
+        
+        // Lưu user info (không lưu token vào user object)
+        const { token, ...userInfo } = userData;
+        setUser(userInfo);
+        localStorage.setItem('user', JSON.stringify(userInfo));
+        return userInfo;
     };
 
     const register = async (formData) => {
@@ -29,21 +37,20 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         setUser(null);
         localStorage.removeItem('user');
+        localStorage.removeItem('token');
     };
 
     const updateUser = async (newData) => {
-        const updated = await authAPI.updateProfile({ 
-            email: user.email, 
-            ...newData 
-        });
+        // Không cần gửi email nữa — server lấy từ token
+        const updated = await authAPI.updateProfile(newData);
         setUser(updated);
         localStorage.setItem('user', JSON.stringify(updated));
         return updated;
     };
 
     const changePassword = async ({ oldPassword, newPassword }) => {
+        // Không cần gửi email nữa — server lấy từ token
         const result = await authAPI.changePassword({ 
-            email: user.email, 
             oldPassword, 
             newPassword 
         });

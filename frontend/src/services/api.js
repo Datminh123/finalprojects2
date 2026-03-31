@@ -9,7 +9,48 @@ const API = axios.create({
   },
 });
 
-// ============ JOB API ============
+// Request interceptor — Tự động gắn JWT token vào header
+API.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Response interceptor — Xử lý lỗi 401 (hết phiên) và 403 (sai quyền)
+API.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response) {
+      const url = error.config?.url || '';
+      // Bỏ qua 401 từ login/register — đó là sai thông tin, không phải hết phiên
+      const isAuthEndpoint = url.includes('/auth/login') || url.includes('/auth/register');
+
+      if (error.response.status === 401 && !isAuthEndpoint) {
+        // Token hết hạn/không hợp lệ → buộc đăng nhập lại
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        if (!window.location.pathname.includes("/login")) {
+          window.location.href = "/login";
+        }
+      }
+      if (error.response.status === 403) {
+        // Sai quyền → hiển thị thông báo lỗi từ server
+        const msg = error.response.data?.message || "Bạn không có quyền thực hiện hành động này!";
+        import('antd').then(({ message }) => {
+          message.error(msg);
+        });
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
+// JOB API 
 export const jobsAPI = {
   getAll: async (params) => {
     try {
@@ -71,7 +112,7 @@ export const jobsAPI = {
   }
 };
 
-// ============ APPLICATIONS API ============
+// APPLICATIONS API 
 export const applicationsAPI = {
   getAll: async (params) => {
     try {
@@ -144,7 +185,7 @@ export const applicationsAPI = {
   }
 };
 
-// ============ AUTH API ============
+// AUTH API 
 export const authAPI = {
   register: async (userData) => {
     try {
@@ -207,7 +248,7 @@ export const authAPI = {
   }
 };
 
-// ============ ADMIN API ============
+//  ADMIN API 
 export const adminAPI = {
   getStats: async () => {
     try {
@@ -303,7 +344,7 @@ export const adminAPI = {
   }
 };
 
-// ============ USERS API (Optional) ============
+// USERS API 
 export const usersAPI = {
   getAll: async () => {
     try {

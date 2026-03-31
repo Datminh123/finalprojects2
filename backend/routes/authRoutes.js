@@ -1,8 +1,10 @@
 import express from "express";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import Account from "../models/Account.js";
 import { env } from "../config/environtment.js";
+import { authMiddleware } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 // Cấu hình nodemailer
@@ -19,6 +21,11 @@ const transporter = nodemailer.createTransport({
 router.post("/register", async (req, res) => {
   try {
     const { fullName, email, password, role, phone, company } = req.body;
+
+    // Chặn đăng ký tài khoản admin qua API — admin chỉ được tạo bởi seed script hoặc admin khác
+    if (role === 'admin') {
+      return res.status(403).json({ message: "Không được phép đăng ký tài khoản admin!" });
+    }
 
     const existingUser = await Account.findOne({ email });
     if (existingUser) {
@@ -63,19 +70,27 @@ router.post("/login", async (req, res) => {
 
     const userResponse = account.toObject();
     delete userResponse.password;
-    res.json(userResponse);
+
+    // Tạo JWT token
+    const token = jwt.sign(
+      { id: account._id, email: account.email, role: account.role },
+      env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.json({ ...userResponse, token });
   } catch (error) {
     res.status(500).json({ message: "Lỗi đăng nhập", error: error.message });
   }
 });
 
-// PUT /api/auth/profile
-router.put("/profile", async (req, res) => {
+// PUT /api/auth/profile — Cần đăng nhập
+router.put("/profile", authMiddleware, async (req, res) => {
   try {
-    const { email, fullName, phone, company, avatar } = req.body;
+    const { fullName, phone, company, avatar } = req.body;
 
-    const account = await Account.findOneAndUpdate(
-      { email },
+    const account = await Account.findByIdAndUpdate(
+      req.user.accountId,
       { fullName, phone, company, avatar },
       { returnDocument: 'after' }
     );
@@ -92,12 +107,12 @@ router.put("/profile", async (req, res) => {
   }
 });
 
-// PUT /api/auth/change-password
-router.put("/change-password", async (req, res) => {
+// PUT /api/auth/change-password — Cần đăng nhập
+router.put("/change-password", authMiddleware, async (req, res) => {
   try {
-    const { email, oldPassword, newPassword } = req.body;
+    const { oldPassword, newPassword } = req.body;
 
-    const account = await Account.findOne({ email });
+    const account = await Account.findById(req.user.accountId);
     if (!account) {
       return res.status(404).json({ message: "Không tìm thấy tài khoản!" });
     }
@@ -129,7 +144,7 @@ router.post("/forgot-password", async (req, res) => {
 
     // EMAIL_USER=minhdat2727@gmail.com
 // EMAIL_PASS=tibn fwkv csnf yxgl
-    const sendEmail = 'minhdat2727@gmail.com'
+    const sendEmail = env.EMAIL_USER;
     console.log('sendEmail',sendEmail)
     // Tạo mã OTP 6 chữ số
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -143,11 +158,11 @@ router.post("/forgot-password", async (req, res) => {
     const mailOptions = {
       from: `"Job Portal" <${sendEmail}>`,
       to: email,
-      subject: "🔐 Mã OTP đặt lại mật khẩu - Job Portal",
+      subject: "Mã OTP đặt lại mật khẩu - Job Portal",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px;">
           <div style="background: white; border-radius: 8px; padding: 30px; text-align: center;">
-            <h2 style="color: #333; margin-bottom: 10px;">💼 Job Portal</h2>
+            <h2 style="color: #333; margin-bottom: 10px;">Job Portal</h2>
             <p style="color: #666;">Bạn đã yêu cầu đặt lại mật khẩu.</p>
             <div style="background: #f0f2f5; border-radius: 8px; padding: 20px; margin: 20px 0;">
               <p style="color: #999; margin: 0 0 10px 0; font-size: 14px;">Mã OTP của bạn:</p>
